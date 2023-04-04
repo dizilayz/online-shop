@@ -2,18 +2,23 @@
 <div class="v-catalog">
     <h1>Catalog</h1>
     <div class="v-catalog-list">
-        <vCatalogItem v-for="product in products" 
+        <vCatalogItem 
+        v-for="product in PRODUCTS" 
         :key="product.article" 
         :product_data="product" 
-        @sendDataToParent= showChildArticle
-        
+        @addToCart=addToCart 
         />
     </div>
-</div>ff
+</div>
 </template>
 
 <script>
 import vCatalogItem from './v-catalog-item.vue';
+import {
+    mapActions,
+    mapGetters
+} from 'vuex';
+
 export default {
     name: 'v-catalog',
     components: {
@@ -21,67 +26,25 @@ export default {
     },
     props: {},
     data() {
-        return {
-            "products": [{
-                    image: "1.jpg",
-                    name: "T-shirt 1",
-                    price: 100,
-                    article: "T1",
-                    available: true,
-                    category: "Мужские"
-                },
-                {
-                    image: "2.jpg",
-                    name: "T-shirt 2",
-                    price: 200,
-                    article: "T2",
-                    available: true,
-                    category: "Женские"
-                },
-                {
-                    image: "3.jpg",
-                    name: "T-shirt 3",
-                    price: 300,
-                    article: "T3",
-                    available: false,
-                    category: "Женские"
-                },
-                {
-                    image: "4.jpg",
-                    name: "T-shirt 4",
-                    price: 400,
-                    article: "T4",
-                    available: true,
-                    category: "Мужские"
-                },
-                {
-                    image: "5.jpg",
-                    name: "T-shirt 5",
-                    price: 500,
-                    article: "T5",
-                    available: false,
-                    category: "Женские"
-                },
-                {
-                    image: "6.jpeg",
-                    name: "T-shirt 6",
-                    price: 600,
-                    article: "T6",
-                    available: true,
-                    category: "Женские"
-                }
-            ]
-        }
+        return {}
     },
-    computed: {},
+    computed: {
+        ...mapGetters([
+            'PRODUCTS'
+        ])
+    },
     methods: {
-        showChildArticle:function(data) {
-            console.log(data)
+        ...mapActions([
+            'GET_PRODUCTS_FROM_API',
+            'ADD_TO_CART',
+        ]),
+        addToCart: function (data) {
+            this.ADD_TO_CART(data)
         }
     },
     watch: {},
     mounted() {
-        console.log('done')
+        this.GET_PRODUCTS_FROM_API()
     }
 }
 </script>
